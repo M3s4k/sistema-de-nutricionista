@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nutrInfo</title>
+  <link rel="stylesheet" href="styless.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .crud-form {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>nutrInfo - Sistema para nutricionistas</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cadastro.html">Cadastrar Paciente</a></li>
+        <li><a href="#">Planejamento do paciente</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <h2>Cadastrar paciente</h2>
+      <form id="crudForm" class="crud-form">
+        <div class="form-group">
+          <label for="name">Nome:</label>
+          <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="peso">Peso:</label>
+          <input type="peso" class="form-control" id="peso" required>
+        </div>
+        <div class="form-group">
+          <label for="altura">Altura:</label>
+          <input type="altura" class="form-control" id="altura" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+      </form>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Peso</th>
+            <th>Altura</th>
+            <th>IMC</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Os dados inseridos serão exibidos aqui -->
+        </tbody>
+      </table>
+      <br>
+      <br>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2024 - Sistema nutrInfo</p>
+  </footer>
+  <!-- Bootstrap JS e jQuery (necessário para Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // Array para armazenar os dados
+    let listaClientes = [];
+
+    // Função para adicionar um novo item à lista
+    function adicionarItem(name, email, peso, altura, imc) {
+      listaClientes.push({ name, email,peso, altura, imc });
+      atualizarTabela();
+    }
+
+    // Função para atualizar a tabela
+    function atualizarTabela() {
+      const tableBody = document.getElementById('tableBody');
+      tableBody.innerHTML = '';
+      listaClientes.forEach(item => {
+        const row = `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.email}</td>
+                    <td>${item.peso}</td>
+                    <td>${item.altura}</td>
+                    <td>${item.imc.toFixed(2)}</td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" onclick="excluirItem('${item.email}')">Excluir</button>
+                    </td>
+                  </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    // Função para calcular o Índice de Massa Corporal (IMC)
+    function calcularIMC(peso, altura) {
+      // Fórmula do IMC: IMC = peso / (altura * altura)
+      const imc = peso / (altura * altura);
+      return imc;
+    }
+
+    // Função para excluir um item da lista
+    function excluirItem(email) {
+      listaClientes = listaClientes.filter(item => item.email !== email);
+      atualizarTabela();
+    }
+
+    // Evento de envio do formulário
+    document.getElementById('crudForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const peso = document.getElementById('peso').value;
+      const altura = document.getElementById('altura').value;
+      const imc = calcularIMC(peso, altura);
+      adicionarItem(name, email, peso, altura, imc);
+
+      // Limpar campos do formulário
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('peso').value = '';
+      document.getElementById('altura').value = '';
+    });
+  </script>
+
+
+</body>
+
+</html>
